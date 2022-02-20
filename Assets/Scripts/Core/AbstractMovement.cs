@@ -5,7 +5,6 @@ namespace Core
 {
     public abstract class AbstractMovement : MonoBehaviour
     {
-        [Header("Navigation")] 
         [SerializeField] private bool drawGizmos = false;
         [SerializeField] private float speed = 5f;
         [SerializeField] private float overlapCircleDistance = 1f;
@@ -15,9 +14,15 @@ namespace Core
         private Vector2 _currentDot;
         protected Rigidbody2D _rb;
         protected bool _reachedDot = false;
-        
+        private float _finalSpeed;
+
+        protected void SetSpeedMultiplier(float newMultiplier)
+        {
+            _finalSpeed = speed * newMultiplier;
+        }
         protected void Awake()
         {
+            _finalSpeed = speed;
             _currentDot = Vector2.zero;
             _rb = GetComponent<Rigidbody2D>();
             _sqrStoppingDistance = stoppingDistance * stoppingDistance;
@@ -32,7 +37,7 @@ namespace Core
                 _rb.velocity = Vector2.zero;
                 return;
             }
-            _rb.velocity = Vector2.ClampMagnitude(directionToDot.normalized * speed, speed);
+            _rb.velocity = Vector2.ClampMagnitude(directionToDot.normalized * _finalSpeed, _finalSpeed);
         }
 
         protected void SetCurrentDot(List<Vector2> dots)

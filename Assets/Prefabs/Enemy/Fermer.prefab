@@ -10,10 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4614647102772995722}
   - component: {fileID: -7157810637143659627}
+  - component: {fileID: 8807087868214710338}
   - component: {fileID: 1054291642940196170}
   - component: {fileID: 288806120441615749}
   - component: {fileID: 5126317722229637532}
-  m_Layer: 6
+  - component: {fileID: 6253891401671088139}
+  m_Layer: 7
   m_Name: Fermer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,6 +54,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.21
+--- !u!58 &8807087868214710338
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614647102772995724}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.33
 --- !u!50 &1054291642940196170
 Rigidbody2D:
   serializedVersion: 4
@@ -86,8 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showGizmos: 1
-  distanceToMoving: 3.94
-  distanceToAttack: 1.78
+  distanceToAttacking: 4.82
 --- !u!114 &5126317722229637532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,14 +117,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a676c3461a4d438db0a57708bc3a7b2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  normalSpeed: 1
-  attackingSpeed: 0
-  dirtySpeed: 0
   drawGizmos: 1
-  distFromCenterToAroundPoint: 1
-  minDistToGetAround: 0.6
-  minDistToWayPoint: 0.15
+  speed: 2
+  overlapCircleDistance: 1
+  overlapCircleRadius: 0.35
+  stoppingDistance: 0.1
+  checkPathRateInSeconds: 0.3
+  attackingSpeedMultiplier: 1.3
+  dirtySpeedMultiplier: 0.4
+--- !u!114 &6253891401671088139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614647102772995724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b075ecdafb45708c67c80c06d34673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRateInSeconds: 1.5
 --- !u!1 &6908256669469995170
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,7 +150,7 @@ GameObject:
   - component: {fileID: 6709100886684995469}
   - component: {fileID: 2024480309166054052}
   - component: {fileID: 1276836307227988290}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}

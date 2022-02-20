@@ -1,4 +1,7 @@
-﻿using Player;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Core;
+using Player;
 using UnityEngine;
 
 namespace Enemy
@@ -6,22 +9,24 @@ namespace Enemy
     public class EnemyStateController : MonoBehaviour
     {
         [SerializeField] private bool showGizmos = false;
-        [SerializeField] private float distanceToMoving;
-        [SerializeField] private float distanceToAttack;
+        [SerializeField] private float distanceToAttacking;
+        
 
         private float _sqrDistanceToMoving;
-        private float _sqrDistanceToAttack;
+        private float _sqrDistanceToAttacking;
         private Transform _player;
-        private EnemyState _currentState;
-        private EnemyState _prevState;
-        private IOnEnemyStateChange[] _components;
+        private State _currentState;
+        private State _prevState;
+        private AnimationController _animationController;
+        private List<IOnStateChange> _components;
         private void Awake()
         {
-            _components = GetComponents<IOnEnemyStateChange>();
-            _currentState = EnemyState.WalkingAround;
+            _components = GetComponents<IOnStateChange>().ToList();
+            _components.Add(GetComponentInChildren<AnimationController>());
+            
+            _currentState = State.Normal;
             _prevState = _currentState;
-            _sqrDistanceToMoving = distanceToMoving * distanceToMoving;
-            _sqrDistanceToAttack = distanceToAttack * distanceToAttack;
+            _sqrDistanceToAttacking = distanceToAttacking * distanceToAttacking;
         }
 
         private void Start()
@@ -37,18 +42,15 @@ namespace Enemy
         private void CheckDistanceToPlayer()
         {
             var sqrDistance = (transform.position - _player.position).sqrMagnitude;
-            if (sqrDistance < _sqrDistanceToAttack)
+            if (sqrDistance > _sqrDistanceToAttacking)
             {
-                _currentState = EnemyState.Attacking;
-            }
-            else if (sqrDistance < _sqrDistanceToMoving)
-            {
-                _currentState = EnemyState.MovingToTarget;
+                _currentState = State.Normal;
             }
             else
             {
-                _currentState = EnemyState.WalkingAround;
+                _currentState = State.Attacking;
             }
+   
             if (_prevState == _currentState) return;
             
             foreach (var component in _components)
@@ -61,10 +63,8 @@ namespace Enemy
         private void OnDrawGizmosSelected()
         {
             if (!showGizmos) return;
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(transform.position, distanceToMoving);
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, distanceToAttack);
+            Gizmos.DrawWireSphere(transform.position, distanceToAttacking);
         }
     }
 }

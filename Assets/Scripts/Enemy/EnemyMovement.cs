@@ -6,42 +6,57 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class EnemyMovement : AbstractMovement, IOnEnemyStateChange
+    public class EnemyMovement : AbstractMovement, IOnStateChange
     {
-        [SerializeField] private Transform target;
-        [SerializeField] private float checkPathRateInSeconds = 0.3f;
         
+        [SerializeField] private float checkPathRateInSeconds = 0.3f;
+        [Header("Speed settings")]
+        [SerializeField] private float attackingSpeedMultiplier = 1.3f;
+        [SerializeField] private float dirtySpeedMultiplier = 0.4f;
+        
+        private Transform _target;
+        private Transform _player;
         private Coroutine _updPathCoroutine;
         private List<Vector2> cachedDots;
-        private bool _isFollowing = false;
 
-        public void OnStateChange(EnemyState newState)
+        public void OnStateChange(State newState)
         {
-            if (newState != EnemyState.MovingToTarget)
+            switch (newState)
             {
-                StopAllCoroutines();
-                _rb.velocity = Vector2.zero;
-                _isFollowing = false;
-                _updPathCoroutine = null;
-            }
-            else
-            {
-                _isFollowing = true;
-                if (_updPathCoroutine != null) return;
-                _updPathCoroutine = StartCoroutine(UpdatePathCoroutine());
+                case State.Normal:
+                    SetSpeedMultiplier(1);
+                    ChangeTarget(null);
+                    break;
+                
+                case State.Attacking:
+                    SetSpeedMultiplier(attackingSpeedMultiplier);
+                    ChangeTarget(_player);
+                    break;
+                
+                case State.Dirty:
+                    SetSpeedMultiplier(dirtySpeedMultiplier);
+                    ChangeTarget(null);
+                    break;
             }
         }
         
         private void Start()
         {
+            _player = FindObjectOfType<PlayerMovement>().transform;
             cachedDots = new List<Vector2>();
-            target = FindObjectOfType<PlayerMovement>().transform;
+            _target = _player;
+            StartCoroutine(UpdatePathCoroutine());
         }
         
         private void Update()
         {
-            if (!_isFollowing) return;
             Movement();
+        }
+
+        private void ChangeTarget(Transform newTarget)
+        {
+            // if attacking, target - player
+            // else target - carrot
         }
         private IEnumerator UpdatePathCoroutine()
         {
@@ -52,7 +67,7 @@ namespace Enemy
                     yield return null;
                     continue;
                 }
-                var direction = target.position - transform.position;
+                var direction = _target.position - transform.position;
                 Vector2 mainVect, secondVect;
                 
                 if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))

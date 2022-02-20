@@ -1,30 +1,9 @@
-﻿using UnityEngine;
+﻿using Enemy;
+using UnityEngine;
 
-namespace Characters
+namespace Core
 {
-    public enum WalkState
-    {
-        WalkUp,
-        AttackingWalkUp,
-        DirtyWalkUp,
-        WalkDown,
-        AttackingWalkDown,
-        DirtyWalkDown,
-        WalkRight,
-        AttackingWalkRight,
-        DirtyWalkRight,
-        WalkLeft,
-        AttackingWalkLeft,
-        DirtyWalkLeft
-    }
-    public enum State
-    {
-        Normal,
-        Attacking,
-        Dirty,
-    }
-
-    public class AnimationController : MonoBehaviour
+    public class AnimationController : MonoBehaviour, IOnStateChange
     {
         [SerializeField] private float minVelocityToChange = 0.1f;
         [SerializeField] private float minAngleToChange = 10f;
@@ -34,25 +13,25 @@ namespace Characters
         private WalkState _walkState;
         private Rigidbody2D _rb;
         private Vector2 _prevDirection;
-        public State CurrentState { get; set; }
-
+        private State _currentState;
+        
         private void Awake()
         {
             _prevDirection = Vector2.up;
             _rb = GetComponentInParent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _sqrMinVelocityToChange = minVelocityToChange * minVelocityToChange;
-            CurrentState = State.Normal;
+            _currentState = State.Normal;
             _walkState = WalkState.WalkDown;
         }
         
         private void Update()
         {
             if (_rb.velocity.sqrMagnitude < _sqrMinVelocityToChange) return;
-            ChangePlayerWalkState(_rb.velocity);
+            ChangeWalkState(_rb.velocity);
         }
         
-        private void ChangePlayerWalkState(Vector2 direction)
+        private void ChangeWalkState(Vector2 direction)
         {
             var prevAngle = Vector2.Angle(_prevDirection, direction);
             if (prevAngle < minAngleToChange) return;
@@ -73,8 +52,17 @@ namespace Characters
             }
 
             _prevDirection = direction;
-            _animator.SetInteger("State", (int) _walkState + (int) CurrentState);
+            _animator.SetInteger("State", (int) _walkState + (int) _currentState);
+            
         }
 
+        public void OnStateChange(State newState)
+        {
+            _currentState = newState;
+            _animator.SetInteger("State", (int) _walkState + (int) _currentState);
+            Debug.Log((int) _walkState + (int) _currentState);
+            Debug.Log(_currentState);
+            
+        }
     }
 }

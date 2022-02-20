@@ -1,4 +1,3 @@
-using Characters;
 using Core;
 using UnityEngine;
 namespace Player

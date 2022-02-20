@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6655525502961531527}
   - component: {fileID: 4778253846735067571}
   - component: {fileID: 5946237908224700004}
+  - component: {fileID: 1930600293703809440}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -84,9 +85,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f152bf5d32b71458c003c8acecdf14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawGizmos: 0
   speed: 1.7
+  overlapCircleDistance: 1
+  overlapCircleRadius: 0.35
+  stoppingDistance: 0.1
   joystick: {fileID: 0}
   startWalkValue: 0.3
+--- !u!114 &1930600293703809440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2594912354810629249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d660da52754a21b961ca55e7b3bc41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 3
 --- !u!1 &7932843977910710401
 GameObject:
   m_ObjectHideFlags: 0
