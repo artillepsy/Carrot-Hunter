@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
@@ -18,8 +19,11 @@ namespace SceneManagement
         [SerializeField] private GameObject winCanvas;
         [SerializeField] private Transform starsContentPane;
         [SerializeField] private Transform starImagePrefab;
+        [SerializeField] private Transform emptyStarImagePrefab;
         [SerializeField] private int maxStars = 4;
         private StatsManager _statsManager;
+        
+        
         
         public void OnClickRestart()
         {
@@ -31,10 +35,21 @@ namespace SceneManagement
             Application.Quit();
         }
         
-        public void OnClickPause() => ShowCurrent(pauseCanvas);
-        public void OnClickResume() => ShowCurrent(resumeCanvas);
+        public void OnClickPause()
+        {
+            Time.timeScale = 0;
+            ShowCurrent(pauseCanvas);
+        }
+
+        public void OnClickResume()
+        {
+            Time.timeScale = 1;
+            ShowCurrent(resumeCanvas);
+        }
+
         private void Start()
         {
+            Time.timeScale = 1;
             _statsManager = FindObjectOfType<StatsManager>();
             _statsManager.OnGameOver.AddListener(OnGameOver);
             _statsManager.OnWin.AddListener(OnWin);
@@ -52,18 +67,21 @@ namespace SceneManagement
 
         private void OnGameOver()
         {
+            Time.timeScale = 0;
             DestroyEnemies();
             ShowCurrent(gameOverCanvas);
         }
 
         private void OnWin()
         {
+            Time.timeScale = 0;
             ShowCurrent(winCanvas);
             DestroyEnemies();
             var starsCount = _statsManager.CalculateScore(maxStars);
-            for (int i = 0; i < starsCount; i++)
+            for (var i = 0; i < maxStars; i++)
             {
-                Instantiate(starImagePrefab, starsContentPane);
+                var prefab = i < starsCount ? starImagePrefab : emptyStarImagePrefab;
+                Instantiate(prefab, starsContentPane);
             }
         }
 

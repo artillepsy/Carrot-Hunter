@@ -48,7 +48,7 @@ namespace SceneManagement
             _playerHealth = FindObjectOfType<PlayerHealth>();
             _playerHealth.OnTakeDamage.AddListener(ChangeHeartsCount);
 
-            Bomb.OnCarrotExplose.AddListener(() => _endCarrotCount--);
+            Bomb.OnCarrotExplose.AddListener(DecrementCarrotCount);
             FindObjectOfType<CarrotPicker>().OnCarrotPickUp.AddListener(IncreaseScore);
             DisplayHearts();
         }
@@ -62,6 +62,18 @@ namespace SceneManagement
             }
         }
 
+        private void DecrementCarrotCount()
+        {
+            _endCarrotCount--;
+            if (_pickedCarrots != _endCarrotCount) return;
+            if (_pickedCarrots == 0)
+            {
+                OnGameOver?.Invoke();
+                _endGame = true;
+            }
+            finishArrow.SetActive(true);
+            _carrotsCollected = true;
+        }
         private void DisplayHearts()
         {
             for (int i = 0; i < _playerHealth.Health; i++)
@@ -86,11 +98,9 @@ namespace SceneManagement
         {
             _pickedCarrots++;
             scoreText.text = _pickedCarrots + " / " + _startCarrotCount;
-            if (_pickedCarrots == _endCarrotCount)
-            {
-                finishArrow.SetActive(true);
-                _carrotsCollected = true;
-            }
+            if (_pickedCarrots != _endCarrotCount) return;
+            finishArrow.SetActive(true);
+            _carrotsCollected = true;
         }
         
         private void OnTriggerEnter2D(Collider2D other)
