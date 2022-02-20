@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core;
 using Player;
 using UnityEngine;
@@ -13,7 +14,9 @@ namespace Enemy
         [Header("Speed settings")]
         [SerializeField] private float attackingSpeedMultiplier = 1.3f;
         [SerializeField] private float dirtySpeedMultiplier = 0.4f;
-        
+        [SerializeField] private float nextCarrotDistance = 0.1f;
+
+        private float _sqrNextCarrotDistance;
         private Transform _target;
         private Transform _player;
         private Coroutine _updPathCoroutine;
@@ -25,24 +28,26 @@ namespace Enemy
             {
                 case State.Normal:
                     SetSpeedMultiplier(1);
-                    ChangeTarget(null);
+                    ChangeTargetToCarrot();
                     break;
                 
                 case State.Attacking:
                     SetSpeedMultiplier(attackingSpeedMultiplier);
-                    ChangeTarget(_player);
+                    _target = _player;
                     break;
                 
                 case State.Dirty:
                     SetSpeedMultiplier(dirtySpeedMultiplier);
-                    ChangeTarget(null);
+                    ChangeTargetToCarrot();
                     break;
             }
         }
         
         private void Start()
         {
+            _sqrNextCarrotDistance = nextCarrotDistance * nextCarrotDistance;
             _player = FindObjectOfType<PlayerMovement>().transform;
+            _player.GetComponent<CarrotPicker>().OnCarrotPickUp.AddListener(ChangeTargetToCarrot);
             cachedDots = new List<Vector2>();
             _target = _player;
             StartCoroutine(UpdatePathCoroutine());
@@ -52,11 +57,24 @@ namespace Enemy
         {
             Movement();
         }
-
-        private void ChangeTarget(Transform newTarget)
+        
+        private void ChangeTargetToCarrot()
         {
-            // if attacking, target - player
-            // else target - carrot
+            var carrots = GameObject.FindGameObjectsWithTag("Carrot").ToList();
+            if (carrots.Count == 0)
+            {
+                _target = _player;
+                return;
+            }
+            _target = carrots[Random.Range(0, carrots.Count)].transform;
+        }
+
+        private void CheckDistanceToCarrot()
+        {
+            if (!_target.CompareTag("Carrot")) return;
+            var sqrDistance = (transform.position - _target.position).sqrMagnitude;
+            if (sqrDistance > _sqrNextCarrotDistance) return;
+            ChangeTargetToCarrot();
         }
         private IEnumerator UpdatePathCoroutine()
         {
@@ -67,6 +85,16 @@ namespace Enemy
                     yield return null;
                     continue;
                 }
+
+                if (_target != null)
+                {
+                    CheckDistanceToCarrot();
+                }
+                else
+                {
+                    ChangeTargetToCarrot();
+                }
+                
                 var direction = _target.position - transform.position;
                 Vector2 mainVect, secondVect;
                 

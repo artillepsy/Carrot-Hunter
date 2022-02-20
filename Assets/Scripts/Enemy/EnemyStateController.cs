@@ -47,12 +47,15 @@ namespace Enemy
             while (true)
             {
                 yield return null;
-                if (_dirtyTime != 0)
+                if (_dirtyTime > 0)
                 {
                     _currentState = State.Dirty;
                     ChangeStateInComponents();
-                    yield return new WaitForSeconds(_dirtyTime);
-                    _dirtyTime = 0;
+                    while (_dirtyTime > 0)
+                    {
+                        _dirtyTime -= Time.deltaTime;
+                        yield return null;
+                    }
                 }
                 
                 var sqrDistance = (transform.position - _player.position).sqrMagnitude;
