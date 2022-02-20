@@ -2,15 +2,17 @@
 using Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace UI
+namespace SceneManagement
 {
-    public class HudCanvas : MonoBehaviour
+    public class StatsManager : MonoBehaviour
     {
         [SerializeField] private Transform heartPrefab;
         [SerializeField] private Transform heartsParent;
         [SerializeField] private TextMeshProUGUI scoreText;
-
+        public readonly UnityEvent OnPlayerDie = new UnityEvent(); 
+        public readonly UnityEvent OnCarrotsCollected = new UnityEvent(); 
         private int _startCarrotCount = 0;
         private int _carrotsOnScene;
         private int _pickedCarrots = 0;
@@ -40,7 +42,11 @@ namespace UI
         }
         private void ChangeHealth(int health)
         {
-            if (_hearts.Count == 0) return;
+            if (health == 0)
+            {
+                OnPlayerDie?.Invoke();
+                return;
+            }
             var heart = _hearts[0];
             _hearts.Remove(heart);
             Destroy(heart.gameObject);
@@ -50,7 +56,10 @@ namespace UI
         {
             _pickedCarrots++;
             scoreText.text = _pickedCarrots + " / " + _startCarrotCount;
-            if(_pickedCarrots == _carrotsOnScene) Debug.Log("Win");
+            if (_pickedCarrots == _carrotsOnScene)
+            {
+                OnCarrotsCollected?.Invoke();
+            }
         }
     }
 }
