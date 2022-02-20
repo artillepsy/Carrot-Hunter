@@ -5,13 +5,13 @@ namespace Player
 {
     public class PlayerHealth : MonoBehaviour
     {
-        public readonly UnityEvent<int> OnHealthChange = new UnityEvent<int>();
+        public readonly UnityEvent<int> OnTakeDamage = new UnityEvent<int>();
         [SerializeField] private int health = 3;
         public int Health => health;
-        public void Decrement()
+        public void Damage()
         {
             health--;
-            OnHealthChange?.Invoke(health);
+            OnTakeDamage?.Invoke(health);
         }
     }
 }

@@ -5,31 +5,28 @@ using Random = UnityEngine.Random;
 
 namespace SceneManagement
 {
+
     public class ObjectPlacer : MonoBehaviour
     {
         [SerializeField] private bool drawGizmos = true;
-        [SerializeField] private List<Transform> prefabs;
+        [SerializeField] private GameObject prefab;
         [SerializeField] private int minObjectCount;
         [SerializeField] private int maxObjectCount;
         [SerializeField] private float minSpawnDistance;
         [SerializeField] private float maxCheckAttempts = 30;
-        protected int _startObjectCount; 
+        private int _startObjectCount;
         private float _sqrMinSpawnDistance;
         private List<Vector2> dots;
 
-        protected void Awake()
-        {
-            _sqrMinSpawnDistance = minSpawnDistance * minSpawnDistance;
-            _startObjectCount = Random.Range(minObjectCount, maxObjectCount);
-        }
-
-        protected void Start()
+        private void Start()
         {
             dots = new List<Vector2>();
+            _sqrMinSpawnDistance = minSpawnDistance * minSpawnDistance;
+            _startObjectCount = Random.Range(minObjectCount, maxObjectCount);
             FindDots();
             SpawnObjects();
         }
-        
+
         private void FindDots()
         {
             Vector2 playerPosition = FindObjectOfType<PlayerMovement>().transform.position;
@@ -41,15 +38,16 @@ namespace SceneManagement
                 dots.Add(dotPosition);
             }
         }
+
         private void SpawnObjects()
         {
             var spawnedObjectsPositions = new List<Vector2>();
             var attempts = 0;
-        
+
             for (var i = 0; i < _startObjectCount; i++)
             {
                 var spawnPosition = dots[Random.Range(0, dots.Count)];
-            
+
                 if (!CheckDistanceToSpawnedObjects(spawnPosition, spawnedObjectsPositions))
                 {
                     attempts++;
@@ -58,15 +56,16 @@ namespace SceneManagement
                         i--;
                         continue;
                     }
+
                     attempts = 0;
                 }
-            
+
                 dots.Remove(spawnPosition);
                 spawnedObjectsPositions.Add(spawnPosition);
-                var prefab = prefabs[Random.Range(0, prefabs.Count)];
                 Instantiate(prefab, spawnPosition, Quaternion.identity);
             }
         }
+
         private bool CheckDistanceToSpawnedObjects(Vector2 spawnPosition, List<Vector2> objectsPositions)
         {
             foreach (var objectPosition in objectsPositions)
@@ -76,11 +75,11 @@ namespace SceneManagement
             }
             return true;
         }
-        
+
         private void OnDrawGizmosSelected()
         {
             if (!drawGizmos) return;
-            Gizmos.color = Color.yellow;
+            Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(transform.position, minSpawnDistance);
         }
     }

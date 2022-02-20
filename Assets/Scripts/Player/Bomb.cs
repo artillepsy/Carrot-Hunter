@@ -51,7 +51,7 @@ namespace Player
                 }
                 if (!coll.isTrigger && coll.CompareTag("Player"))
                 {
-                    coll.GetComponent<PlayerHealth>().Decrement();
+                    coll.GetComponent<PlayerHealth>().Damage();
                     continue;
                 }
                 if (coll.CompareTag("Carrot"))

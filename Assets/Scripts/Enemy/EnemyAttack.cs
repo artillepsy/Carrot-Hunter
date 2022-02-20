@@ -29,7 +29,7 @@ namespace Enemy
             {
                 if (_playerIsNear && _isAttacking)
                 {
-                    _playerHealth.Decrement();
+                    _playerHealth.Damage();
                     yield return new WaitForSeconds(attackRateInSeconds);
                 }
                 else yield return null;

@@ -2710,8 +2710,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 576058756}
-  - component: {fileID: 576058757}
   - component: {fileID: 576058758}
+  - component: {fileID: 576058760}
+  - component: {fileID: 576058759}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -2734,26 +2735,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &576058757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 576058755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e1988715ce12ce408e2f2011c39f88c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawGizmos: 0
-  prefabs:
-  - {fileID: 74420219934451043, guid: 4fde9c7cb74be0241a7c673c5b736ea2, type: 3}
-  minObjectCount: 10
-  maxObjectCount: 14
-  minSpawnDistance: 2.88
-  maxCheckAttempts: 30
-  scoreText: {fileID: 681317132}
 --- !u!114 &576058758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2766,13 +2747,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b11f8b928c4f899689a2995f1aa743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawGizmos: 0
+  prefab: {fileID: 74420219934451045, guid: 4fde9c7cb74be0241a7c673c5b736ea2, type: 3}
+  minObjectCount: 9
+  maxObjectCount: 12
+  minSpawnDistance: 1.72
+  maxCheckAttempts: 30
+--- !u!114 &576058759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576058755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b11f8b928c4f899689a2995f1aa743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   drawGizmos: 1
-  prefabs:
-  - {fileID: 8915612610595599677, guid: 53fbd3c207e605f4a9b334f71bab3231, type: 3}
-  - {fileID: 4614647102772995722, guid: 9a631f037409eb04982109e4b5491648, type: 3}
-  minObjectCount: 2
-  maxObjectCount: 4
-  minSpawnDistance: 3.13
+  prefab: {fileID: 4614647102772995724, guid: 9a631f037409eb04982109e4b5491648, type: 3}
+  minObjectCount: 1
+  maxObjectCount: 2
+  minSpawnDistance: 4.27
+  maxCheckAttempts: 30
+--- !u!114 &576058760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576058755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b11f8b928c4f899689a2995f1aa743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawGizmos: 0
+  prefab: {fileID: 8980355920214406460, guid: 53fbd3c207e605f4a9b334f71bab3231, type: 3}
+  minObjectCount: 1
+  maxObjectCount: 2
+  minSpawnDistance: 2.99
   maxCheckAttempts: 30
 --- !u!1001 &577978172
 PrefabInstance:
@@ -6725,7 +6740,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000030517578, y: 13}
+  m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 111.81299, y: 97.1153}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1313250362
@@ -10231,7 +10246,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12, y: 0.000015258789}
+  m_AnchoredPosition: {x: -12, y: 0}
   m_SizeDelta: {x: 405.2908, y: 49.5364}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1964242068
@@ -10441,6 +10456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heartPrefab: {fileID: 511092271395498120, guid: f0473b3a47b678f4dacb35c0dc53b012, type: 3}
   heartsParent: {fileID: 1964242067}
+  scoreText: {fileID: 681317132}
 --- !u!114 &1977327726
 MonoBehaviour:
   m_ObjectHideFlags: 0

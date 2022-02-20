@@ -110,7 +110,9 @@ MonoBehaviour:
   overlapCircleRadius: 0.33
   stoppingDistance: 0.1
   joystick: {fileID: 0}
-  startWalkValue: 0.3
+  startWalkJoystickValue: 0.3
+  damagedSpeedMultiplier: 3.33
+  damagedTimeInSeconds: 2.45
 --- !u!114 &1930600293703809440
 MonoBehaviour:
   m_ObjectHideFlags: 0
