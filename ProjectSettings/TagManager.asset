@@ -7,6 +7,7 @@ TagManager:
   - Obstacle
   - Dot
   - Enemy
+  - Carrot
   layers:
   - Default
   - TransparentFX
@@ -50,9 +51,15 @@ TagManager:
   - name: Stones
     uniqueID: 4057343119
     locked: 0
-  - name: Bombs
+  - name: Carrots
     uniqueID: 1993637737
     locked: 0
-  - name: Characters
+  - name: Bombs
     uniqueID: 1416932073
+    locked: 0
+  - name: Characters
+    uniqueID: 92581203
+    locked: 0
+  - name: Effects
+    uniqueID: 2976582139
     locked: 0

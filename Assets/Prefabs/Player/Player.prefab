@@ -11,9 +11,11 @@ GameObject:
   - component: {fileID: 4170792067663359824}
   - component: {fileID: 6655525502961531527}
   - component: {fileID: 4778253846735067571}
+  - component: {fileID: 7064578703773304058}
   - component: {fileID: 5946237908224700004}
   - component: {fileID: 1930600293703809440}
   - component: {fileID: 5946237908224700011}
+  - component: {fileID: 6871313993083275628}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -73,7 +75,23 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.2
+--- !u!58 &7064578703773304058
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2594912354810629249}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!114 &5946237908224700004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,11 +137,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  bombBtn: {fileID: 0}
   bombPrefab: {fileID: 7537455161664246313, guid: fc5aba4bc1983c9429f10723798e7fcf, type: 3}
   reloadTimeInSeconds: 3
   dirtyTimeInSeconds: 5
   explosionRadius: 1.5
   explosionDelayInSeconds: 1.5
+  overlapCircleRadius: 1.16
+--- !u!114 &6871313993083275628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2594912354810629249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13afa46063a24d83a114816be6cbdcfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7932843977910710401
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,8 +228,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1416932073
-  m_SortingLayer: 4
+  m_SortingLayerID: 92581203
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 436012661, guid: 01d2548f4522908489466c2646b9771a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
