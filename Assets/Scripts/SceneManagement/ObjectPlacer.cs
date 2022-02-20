@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Player;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace SceneManagement
 {
-
     public class ObjectPlacer : MonoBehaviour
     {
         [SerializeField] private bool drawGizmos = true;
@@ -23,6 +23,10 @@ namespace SceneManagement
             dots = new List<Vector2>();
             _sqrMinSpawnDistance = minSpawnDistance * minSpawnDistance;
             _startObjectCount = Random.Range(minObjectCount, maxObjectCount);
+            if (prefab.CompareTag("Carrot"))
+            {
+                FindObjectOfType<StatsManager>().SetStartCarrotCount(_startObjectCount);
+            }
             FindDots();
             SpawnObjects();
         }

@@ -11,40 +11,70 @@ namespace SceneManagement
         [SerializeField] private Transform heartPrefab;
         [SerializeField] private Transform heartsParent;
         [SerializeField] private TextMeshProUGUI scoreText;
-        public readonly UnityEvent OnPlayerDie = new UnityEvent(); 
-        public readonly UnityEvent OnCarrotsCollected = new UnityEvent(); 
+        [SerializeField] private GameObject finishArrow;
+        public readonly UnityEvent OnGameOver = new UnityEvent(); 
+        public readonly UnityEvent OnWin = new UnityEvent(); 
         private int _startCarrotCount = 0;
-        private int _carrotsOnScene;
+        private int _endCarrotCount;
         private int _pickedCarrots = 0;
         private PlayerHealth _playerHealth;
         private List<Transform> _hearts;
         
-        private void Start()
+        private bool _carrotsCollected = false;
+        private bool _playerInTrigger = false;
+        private bool _endGame = false;
+
+        public int CalculateScore(int maxValue)
         {
-            _hearts = new List<Transform>();
-            _playerHealth = FindObjectOfType<PlayerHealth>();
-            _playerHealth.OnTakeDamage.AddListener(ChangeHealth);
-            
-            _startCarrotCount = GameObject.FindGameObjectsWithTag("Carrot").Length;
-            _carrotsOnScene = _startCarrotCount;
-            FindObjectOfType<CarrotPicker>().OnCarrotPickUp.AddListener(IncreaseScore);
-            Bomb.OnCarrotExplose.AddListener(()=> _carrotsOnScene--);
-            scoreText.text = "0 / " + _carrotsOnScene;
-            SetUpHealth();
+            var score = (float)_endCarrotCount / _startCarrotCount;
+            Debug.Log(score);
+            var segment = 1f / maxValue;
+            Debug.Log(segment);
+            Debug.Log(Mathf.RoundToInt(score / segment));
+            return Mathf.RoundToInt(score / segment);
         }
 
-        private void SetUpHealth()
+        public void SetStartCarrotCount(int count)
+        {
+            _startCarrotCount = count;  
+            _endCarrotCount = count;
+            scoreText.text = "0 / " + _endCarrotCount;
+        } 
+        private void Start()
+        {
+            finishArrow.SetActive(false);
+            
+            _hearts = new List<Transform>();
+            _playerHealth = FindObjectOfType<PlayerHealth>();
+            _playerHealth.OnTakeDamage.AddListener(ChangeHeartsCount);
+
+            Bomb.OnCarrotExplose.AddListener(() => _endCarrotCount--);
+            FindObjectOfType<CarrotPicker>().OnCarrotPickUp.AddListener(IncreaseScore);
+            DisplayHearts();
+        }
+        
+        private void Update()
+        {
+            if (_playerInTrigger && _carrotsCollected && !_endGame)
+            {
+                OnWin?.Invoke();
+                _endGame = true;
+            }
+        }
+
+        private void DisplayHearts()
         {
             for (int i = 0; i < _playerHealth.Health; i++)
             {
                 _hearts.Add(Instantiate(heartPrefab, heartsParent));
             }
         }
-        private void ChangeHealth(int health)
+        private void ChangeHeartsCount(int health)
         {
             if (health == 0)
             {
-                OnPlayerDie?.Invoke();
+                OnGameOver?.Invoke();
+                _endGame = true;
                 return;
             }
             var heart = _hearts[0];
@@ -56,9 +86,26 @@ namespace SceneManagement
         {
             _pickedCarrots++;
             scoreText.text = _pickedCarrots + " / " + _startCarrotCount;
-            if (_pickedCarrots == _carrotsOnScene)
+            if (_pickedCarrots == _endCarrotCount)
             {
-                OnCarrotsCollected?.Invoke();
+                finishArrow.SetActive(true);
+                _carrotsCollected = true;
+            }
+        }
+        
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!other.isTrigger && other.CompareTag("Player"))
+            {
+                _playerInTrigger = true;
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (!other.isTrigger && other.CompareTag("Player"))
+            {
+                _playerInTrigger = false;
             }
         }
     }
