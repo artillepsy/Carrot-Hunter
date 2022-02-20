@@ -49,7 +49,7 @@ namespace Player
                     coll.GetComponent<EnemyStateController>().MakeDirty(dirtyTime);
                     continue;
                 }
-                if (!coll.isTrigger && coll.CompareTag("Player"))
+                if (coll.CompareTag("Player"))
                 {
                     coll.GetComponent<PlayerHealth>().Damage();
                     continue;

@@ -63,3 +63,6 @@ TagManager:
   - name: Effects
     uniqueID: 2976582139
     locked: 0
+  - name: Icons
+    uniqueID: 3247057767
+    locked: 0

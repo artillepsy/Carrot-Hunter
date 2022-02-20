@@ -19,7 +19,6 @@ namespace SceneManagement
         private int _pickedCarrots = 0;
         private PlayerHealth _playerHealth;
         private List<Transform> _hearts;
-        
         private bool _carrotsCollected = false;
         private bool _playerInTrigger = false;
         private bool _endGame = false;
@@ -105,7 +104,7 @@ namespace SceneManagement
         
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.isTrigger && other.CompareTag("Player"))
+            if (other.CompareTag("Player"))
             {
                 _playerInTrigger = true;
             }
@@ -113,7 +112,7 @@ namespace SceneManagement
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (!other.isTrigger && other.CompareTag("Player"))
+            if (other.CompareTag("Player"))
             {
                 _playerInTrigger = false;
             }

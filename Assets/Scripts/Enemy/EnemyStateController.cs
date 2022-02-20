@@ -12,6 +12,7 @@ namespace Enemy
         [SerializeField] private bool showGizmos = false;
         [SerializeField] private float distanceToAttacking;
 
+        private IconController _iconController;
         private float _sqrDistanceToMoving;
         private float _sqrDistanceToAttacking;
         private Transform _player;
@@ -30,7 +31,7 @@ namespace Enemy
         {
             _components = GetComponents<IOnStateChange>().ToList();
             _components.Add(GetComponentInChildren<AnimationController>());
-            
+            _iconController = GetComponentInChildren<IconController>();
             _currentState = State.Normal;
             _prevState = _currentState;
             _sqrDistanceToAttacking = distanceToAttacking * distanceToAttacking;
@@ -50,6 +51,7 @@ namespace Enemy
                 if (_dirtyTime > 0)
                 {
                     _currentState = State.Dirty;
+                    _iconController.SetIcon(Icons.Dirty);
                     ChangeStateInComponents();
                     while (_dirtyTime > 0)
                     {
@@ -62,10 +64,12 @@ namespace Enemy
                 if (sqrDistance > _sqrDistanceToAttacking)
                 {
                     _currentState = State.Normal;
+                    _iconController.SetIcon(Icons.Normal);
                 }
                 else
                 {
                     _currentState = State.Attacking;
+                    _iconController.SetIcon(Icons.Attackig);
                 }
    
                 if (_prevState == _currentState) continue;

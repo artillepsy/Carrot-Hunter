@@ -12,6 +12,7 @@ namespace Player
         [SerializeField] private float damagedSpeedMultiplier = 1.5f;
         [SerializeField] private float damagedTimeInSeconds = 2f;
 
+        private IconController _iconController;
         private float _sqrStartWalkValue;
         private WalkState _walkState;
         private Coroutine _onDamagedCoroutine;
@@ -21,6 +22,7 @@ namespace Player
             base.Awake();
             _time = 0;
             _walkState = WalkState.WalkDown;
+            _iconController = GetComponentInChildren<IconController>();
             _sqrStartWalkValue = startWalkJoystickValue * startWalkJoystickValue;
             GetComponent<PlayerHealth>().OnTakeDamage.AddListener(OnTakeDamage);
         }
@@ -41,12 +43,14 @@ namespace Player
         private IEnumerator MoveFasterCoroutine()
         {
             SetSpeedMultiplier(damagedSpeedMultiplier);
+            _iconController.SetIcon(Icons.Damaged);
             while (_time > 0)
             {
                 _time -= Time.deltaTime;
                 yield return null;
             }
             SetSpeedMultiplier(1);
+            _iconController.SetIcon(Icons.Normal);
             _onDamagedCoroutine = null;
         }
         

@@ -61,7 +61,9 @@
      <Compile Include="Assets\Scripts\Core\State.cs" />
      <Compile Include="Assets\Scripts\SceneManagement\ObjectPlacer.cs" />
      <Compile Include="Assets\Scripts\SceneManagement\StatsManager.cs" />
-     <Compile Include="Assets\Scripts\SceneManagement\LevelManager.cs" />
+     <Compile Include="Assets\Scripts\SceneManagement\CanvasManager.cs" />
+     <Compile Include="Assets\Scripts\Core\IconController.cs" />
+     <Compile Include="Assets\Scripts\Core\SpriteAnimation.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

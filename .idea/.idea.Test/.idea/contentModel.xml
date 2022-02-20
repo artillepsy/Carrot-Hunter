@@ -30,6 +30,8 @@
           <e p="Core" t="Include">
             <e p="AbstractMovement.cs" t="Include" />
             <e p="AnimationController.cs" t="Include" />
+            <e p="IconController.cs" t="Include" />
+            <e p="SpriteAnimation.cs" t="Include" />
             <e p="State.cs" t="Include" />
             <e p="WalkState.cs" t="Include" />
           </e>
@@ -47,11 +49,10 @@
             <e p="PlayerMovement.cs" t="Include" />
           </e>
           <e p="SceneManagement" t="Include">
-            <e p="LevelManager.cs" t="Include" />
+            <e p="CanvasManager.cs" t="Include" />
             <e p="ObjectPlacer.cs" t="Include" />
             <e p="StatsManager.cs" t="Include" />
           </e>
-          <e p="UI" t="Include" />
         </e>
         <e p="TextMesh Pro" t="Include">
           <e p="Fonts" t="Include">

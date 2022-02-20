@@ -2111,7 +2111,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 413903067}
   m_LocalRotation: {x: -0, y: -0, z: -0.077481955, w: 0.9969938}
-  m_LocalPosition: {x: -9.08, y: -0.32, z: 0}
+  m_LocalPosition: {x: -9.41, y: -0.29, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2147,7 +2147,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.12, y: 0.04}
+  m_Offset: {x: -0.12, y: 0.13}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2158,7 +2158,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.34, y: 1.86}
+  m_Size: {x: 0.77, y: 1.86}
   m_EdgeRadius: 0
 --- !u!1001 &417032166
 PrefabInstance:
@@ -9156,8 +9156,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drawGizmos: 0
   prefab: {fileID: 8980355920214406460, guid: 53fbd3c207e605f4a9b334f71bab3231, type: 3}
-  minObjectCount: 0
-  maxObjectCount: 0
+  minObjectCount: 1
+  maxObjectCount: 1
   minSpawnDistance: 3.78
   maxCheckAttempts: 30
 --- !u!114 &1459842747
@@ -13556,8 +13556,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1930600293703809440, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: health
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1930600293703809440, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
+      propertyPath: onDamageParticleSystem
+      value: 
+      objectReference: {fileID: 2777535739831521162, guid: f75e1532e4b0b2a47bc8a1eb9c6d728b, type: 3}
     - target: {fileID: 2594912354810629249, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: m_Name
       value: Player
@@ -13606,29 +13610,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4778253846735067571, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
+      propertyPath: m_Radius
+      value: 0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946237908224700004, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
+      propertyPath: speed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5946237908224700004, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: joystick
       value: 
       objectReference: {fileID: 1548059733}
     - target: {fileID: 5946237908224700004, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: drawGizmos
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5946237908224700004, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: overlapCircleRadius
-      value: 0.21
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946237908224700004, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
+      propertyPath: startWalkJoystickValue
+      value: 0.155
       objectReference: {fileID: 0}
     - target: {fileID: 5946237908224700011, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: bombBtn
       value: 
       objectReference: {fileID: 1313250362}
     - target: {fileID: 5946237908224700011, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
+      propertyPath: drawGizmos
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946237908224700011, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: canvasBombImage
       value: 
       objectReference: {fileID: 1313250363}
     - target: {fileID: 5946237908224700011, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: explosionRadius
-      value: 4.11
+      value: 2.3
       objectReference: {fileID: 0}
     - target: {fileID: 5946237908224700011, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: explosionDelayInSeconds
