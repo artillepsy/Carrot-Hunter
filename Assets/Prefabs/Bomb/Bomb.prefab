@@ -103,7 +103,7 @@ MonoBehaviour:
   explosionPartileSystem: {fileID: 4287337328383302310, guid: 61c0e864dda55a749a4eed04979d4484, type: 3}
   rotationMaxAngle: 0.2
   rotationSpeed: 5
-  maxDeviationAngle: 12.5
+  maxDeviationAngle: 15
 --- !u!1 &8835454498828964801
 GameObject:
   m_ObjectHideFlags: 0

@@ -44,11 +44,11 @@
      <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FixedJoystick.cs" />
      <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
      <Compile Include="Assets\Scripts\Core\WalkState.cs" />
+     <Compile Include="Assets\Scripts\Player\Bomb.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\Core\AnimationController.cs" />
      <Compile Include="Assets\Scripts\Enemy\IOnStateChange.cs" />
      <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\DynamicJoystick.cs" />
-     <Compile Include="Assets\Scripts\Bomb\Bomb.cs" />
      <Compile Include="Assets\Joystick Pack\Scripts\Base\Joystick.cs" />
      <Compile Include="Assets\Scripts\Enemy\EnemyMovement.cs" />
      <Compile Include="Assets\Scripts\Enemy\EnemyAttack.cs" />
@@ -59,8 +59,7 @@
      <Compile Include="Assets\Scripts\Core\AbstractMovement.cs" />
      <Compile Include="Assets\Scripts\Core\State.cs" />
      <Compile Include="Assets\Scripts\UI\HudCanvas.cs" />
-     <Compile Include="Assets\Scripts\Carrots\CarrotsManager.cs" />
-     <Compile Include="Assets\Scripts\Core\PlacementManager.cs" />
+     <Compile Include="Assets\Scripts\Carrots\CarrotManager.cs" />
      <Compile Include="Assets\Scripts\Player\CarrotPicker.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
@@ -834,8 +833,6 @@
      <Reference Include="Unity.VisualScripting.State">
      <HintPath>C:/Users/Dell/Desktop/Unity/projects/Test/Library/ScriptAssemblies/Unity.VisualScripting.State.dll</HintPath>
      </Reference>
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

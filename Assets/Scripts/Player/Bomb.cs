@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Enemy;
-using Player;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace Bomb
+namespace Player
 {
     public class Bomb : MonoBehaviour
     {
+        public static readonly UnityEvent OnCarrotExplose = new UnityEvent();
         [SerializeField] private Transform wick;
         [SerializeField] private ParticleSystem wickSparksParticleSystem;
         [SerializeField] private ParticleSystem explosionPartileSystem;
@@ -56,6 +57,7 @@ namespace Bomb
                 if (coll.CompareTag("Carrot"))
                 {
                     Destroy(coll.gameObject);
+                    OnCarrotExplose?.Invoke();
                     continue;
                 }
                 if (!coll.CompareTag("Dot")) continue;

@@ -8,7 +8,7 @@ namespace Player
     {
         [SerializeField] private bool drawGizmos = true;
         [SerializeField] private Button bombBtn;
-        [SerializeField] private Bomb.Bomb bombPrefab;
+        [SerializeField] private Bomb bombPrefab;
         [Header("Attack settings")]
         [SerializeField] private float reloadTimeInSeconds = 3f;
         [SerializeField] private float dirtyTimeInSeconds = 3f;
