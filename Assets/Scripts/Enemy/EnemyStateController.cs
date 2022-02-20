@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
 using Player;
@@ -10,7 +11,6 @@ namespace Enemy
     {
         [SerializeField] private bool showGizmos = false;
         [SerializeField] private float distanceToAttacking;
-        
 
         private float _sqrDistanceToMoving;
         private float _sqrDistanceToAttacking;
@@ -19,6 +19,13 @@ namespace Enemy
         private State _prevState;
         private AnimationController _animationController;
         private List<IOnStateChange> _components;
+        private float _dirtyTime = 0;
+
+        public void MakeDirty(float dirtyTimeInSeconds)
+        {
+            _dirtyTime = dirtyTimeInSeconds;
+        }
+        
         private void Awake()
         {
             _components = GetComponents<IOnStateChange>().ToList();
@@ -32,27 +39,40 @@ namespace Enemy
         private void Start()
         {
             _player = FindObjectOfType<PlayerMovement>().transform;
+            StartCoroutine(ControlStateCoroutine());
         }
 
-        private void Update()
+        private IEnumerator ControlStateCoroutine()
         {
-            CheckDistanceToPlayer();
-        }
-
-        private void CheckDistanceToPlayer()
-        {
-            var sqrDistance = (transform.position - _player.position).sqrMagnitude;
-            if (sqrDistance > _sqrDistanceToAttacking)
+            while (true)
             {
-                _currentState = State.Normal;
-            }
-            else
-            {
-                _currentState = State.Attacking;
-            }
+                yield return null;
+                if (_dirtyTime != 0)
+                {
+                    _currentState = State.Dirty;
+                    ChangeStateInComponents();
+                    yield return new WaitForSeconds(_dirtyTime);
+                    _dirtyTime = 0;
+                }
+                
+                var sqrDistance = (transform.position - _player.position).sqrMagnitude;
+                if (sqrDistance > _sqrDistanceToAttacking)
+                {
+                    _currentState = State.Normal;
+                }
+                else
+                {
+                    _currentState = State.Attacking;
+                }
    
-            if (_prevState == _currentState) return;
-            
+                if (_prevState == _currentState) continue;
+                ChangeStateInComponents();
+
+            }
+        }
+
+        private void ChangeStateInComponents()
+        {
             foreach (var component in _components)
             {
                 component.OnStateChange(_currentState);

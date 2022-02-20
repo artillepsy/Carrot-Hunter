@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6253891401671088139}
   m_Layer: 7
   m_Name: Fermer
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showGizmos: 1
-  distanceToAttacking: 4.82
+  distanceToAttacking: 3.38
 --- !u!114 &5126317722229637532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,11 +118,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 1
-  speed: 2
-  overlapCircleDistance: 1
-  overlapCircleRadius: 0.35
+  speed: 1
+  overlapCircleDistance: 0.95
+  overlapCircleRadius: 0.42
   stoppingDistance: 0.1
-  checkPathRateInSeconds: 0.3
+  checkPathRateInSeconds: 0.2
   attackingSpeedMultiplier: 1.3
   dirtySpeedMultiplier: 0.4
 --- !u!114 &6253891401671088139

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class EnemyAttacking : MonoBehaviour, IOnStateChange
+    public class EnemyAttack : MonoBehaviour, IOnStateChange
     {
         [SerializeField] private float attackRateInSeconds = 1.5f;
         private PlayerHealth _playerHealth;
@@ -38,12 +38,12 @@ namespace Enemy
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.GetComponent<PlayerHealth>()) return;
+            if (!other.CompareTag("Player")) return;
             _playerIsNear = true;
         }
-        private void OnTriggerExit(Collider other)
+        private void OnTriggerExit2D(Collider2D other)
         {
-            if (!other.GetComponent<PlayerHealth>()) return;
+            if (!other.CompareTag("Player")) return;
             _playerIsNear = false;
         }
     }

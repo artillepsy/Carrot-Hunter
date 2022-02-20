@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 4778253846735067571}
   - component: {fileID: 5946237908224700004}
   - component: {fileID: 1930600293703809440}
+  - component: {fileID: 5946237908224700011}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -86,9 +87,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
-  speed: 1.7
-  overlapCircleDistance: 1
-  overlapCircleRadius: 0.35
+  speed: 3
+  overlapCircleDistance: 1.02
+  overlapCircleRadius: 0.33
   stoppingDistance: 0.1
   joystick: {fileID: 0}
   startWalkValue: 0.3
@@ -105,6 +106,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 3
+--- !u!114 &5946237908224700011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2594912354810629249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d79f5e4e088842faabd2448b27de9bd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawGizmos: 0
+  bombPrefab: {fileID: 7537455161664246313, guid: fc5aba4bc1983c9429f10723798e7fcf, type: 3}
+  reloadTimeInSeconds: 3
+  dirtyTimeInSeconds: 5
+  explosionRadius: 1.5
+  explosionDelayInSeconds: 1.5
 --- !u!1 &7932843977910710401
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,4 +243,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minVelocityToChange: 0.1
-  minAngleToChange: 15
+  minAngleToChange: 10

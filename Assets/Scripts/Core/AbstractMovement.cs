@@ -23,7 +23,7 @@ namespace Core
         protected void Awake()
         {
             _finalSpeed = speed;
-            _currentDot = Vector2.zero;
+            _currentDot = transform.position;
             _rb = GetComponent<Rigidbody2D>();
             _sqrStoppingDistance = stoppingDistance * stoppingDistance;
         }

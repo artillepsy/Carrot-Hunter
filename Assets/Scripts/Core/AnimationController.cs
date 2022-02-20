@@ -60,9 +60,6 @@ namespace Core
         {
             _currentState = newState;
             _animator.SetInteger("State", (int) _walkState + (int) _currentState);
-            Debug.Log((int) _walkState + (int) _currentState);
-            Debug.Log(_currentState);
-            
         }
     }
 }
