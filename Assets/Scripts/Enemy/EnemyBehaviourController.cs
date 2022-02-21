@@ -33,7 +33,7 @@ namespace Enemy
         {
             if (_dirtyTime > 0)
             {
-                NotifyTargetsIfNessesary();
+                NotifyTargets();
                 _dirtyTime -= Time.deltaTime;
                 return;
             }
@@ -46,7 +46,7 @@ namespace Enemy
             {
                 _currentBehaviour = Behaviour.Attacking;
             }
-            NotifyTargetsIfNessesary();
+            NotifyTargets();
         }
 
         private void OnDrawGizmosSelected()

@@ -8,7 +8,7 @@ namespace Core
     public abstract class BaseBehaviourController : MonoBehaviour
     {
         protected Behaviour _currentBehaviour;
-        private Behaviour _prevBehaviour;
+        protected Behaviour _prevBehaviour;
         private List<IOnBehaviourChange> _callbackTargets;
         
         protected abstract void UpdateBehaviour();
@@ -20,9 +20,9 @@ namespace Core
             _prevBehaviour = _currentBehaviour;
         }
         
-        protected void NotifyTargetsIfNessesary()
+        protected void NotifyTargets(bool compareStates = true)
         {
-            if (_prevBehaviour == _currentBehaviour) return;
+            if (compareStates && _prevBehaviour == _currentBehaviour) return;
             foreach (var target in _callbackTargets)
             {
                 target.OnBehaviourChange(_currentBehaviour);

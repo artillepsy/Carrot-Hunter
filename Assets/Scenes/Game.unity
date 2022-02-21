@@ -9139,7 +9139,7 @@ MonoBehaviour:
   drawGizmos: 0
   prefab: {fileID: 4614647102772995724, guid: 9a631f037409eb04982109e4b5491648, type: 3}
   minObjectCount: 1
-  maxObjectCount: 1
+  maxObjectCount: 2
   minSpawnDistance: 4.27
   maxCheckAttempts: 30
 --- !u!114 &1459842746
@@ -9157,7 +9157,7 @@ MonoBehaviour:
   drawGizmos: 0
   prefab: {fileID: 8980355920214406460, guid: 53fbd3c207e605f4a9b334f71bab3231, type: 3}
   minObjectCount: 1
-  maxObjectCount: 1
+  maxObjectCount: 2
   minSpawnDistance: 3.78
   maxCheckAttempts: 30
 --- !u!114 &1459842747
@@ -9174,8 +9174,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drawGizmos: 0
   prefab: {fileID: 74420219934451045, guid: 4fde9c7cb74be0241a7c673c5b736ea2, type: 3}
-  minObjectCount: 1
-  maxObjectCount: 4
+  minObjectCount: 9
+  maxObjectCount: 13
   minSpawnDistance: 1.72
   maxCheckAttempts: 30
 --- !u!1 &1466191303
@@ -12484,8 +12484,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12, y: 0}
-  m_SizeDelta: {x: 405.2908, y: 49.5364}
+  m_AnchoredPosition: {x: -12, y: -3.4635925}
+  m_SizeDelta: {x: 353.8331, y: 49.5364}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1964242068
 MonoBehaviour:
@@ -13681,8 +13681,12 @@ PrefabInstance:
       value: 2.3
       objectReference: {fileID: 0}
     - target: {fileID: 5946237908224700011, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
+      propertyPath: reloadTimeInSeconds
+      value: 7.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946237908224700011, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}
       propertyPath: explosionDelayInSeconds
-      value: 2
+      value: 6.22
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2070a4428cef4284a87d6a195b1c9111, type: 3}

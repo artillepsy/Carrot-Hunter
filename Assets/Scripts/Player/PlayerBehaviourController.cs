@@ -10,6 +10,8 @@ namespace Player
         private float _timeSinceDamaged = 0f;
         public void OnDamaged()
         {
+            _currentBehaviour = Behaviour.Damaged;
+            NotifyTargets(false);
             _timeSinceDamaged = onDamagedTime;
         }
 
@@ -29,8 +31,7 @@ namespace Player
             {
                 _currentBehaviour = Behaviour.Normal;
             }
-
-            NotifyTargetsIfNessesary();
+            NotifyTargets();
         }
         
     }

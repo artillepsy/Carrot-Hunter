@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &733320349514657493
 Animator:
   serializedVersion: 4
@@ -198,9 +198,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.13}
   serializedVersion: 2
-  m_Radius: 0.24
+  m_Radius: 0.41
 --- !u!114 &1719679553117139911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,8 +244,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showGizmos: 1
-  distanceToAttackBehaviour: 2.7
-  dirtyTimeInSeconds: 5
+  distanceToAttackBehaviour: 3.66
+  dirtyTimeInSeconds: 4
 --- !u!114 &8910171034053224190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,10 +259,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalSpeed: 1.5
-  attackingSpeed: 1.8
+  attackingSpeed: 1.9
   dirtySpeed: 0.4
   nextTargetDistance: 0.5
-  checkPathRateInSeconds: 0.3
+  checkPathRateInSeconds: 0.5
 --- !u!114 &5916087326651062996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drawGizmos: 1
   kickReloadInSeconds: 1.68
-  kickRadius: 0.34
+  kickRadius: 0.55
 --- !u!114 &8040140424659253847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,7 +315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6113456557413132718, guid: e37b1ab898443c8498191de96607b5c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.69
+      value: 1.38
       objectReference: {fileID: 0}
     - target: {fileID: 6113456557413132718, guid: e37b1ab898443c8498191de96607b5c0, type: 3}
       propertyPath: m_LocalPosition.z
