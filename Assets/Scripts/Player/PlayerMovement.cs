@@ -1,73 +1,64 @@
 using System.Collections;
 using Core;
+using Enemy;
 using UnityEngine;
+using Behaviour = Core.Behaviour;
+
 namespace Player
 {
-    public class PlayerMovement : AbstractMovement
+    public class PlayerMovement : MonoBehaviour, IOnBehaviourChange
     {
+        [Header("Input")]
         [SerializeField] private Joystick joystick;
         [Range(0, 1)] 
-        [SerializeField] private float startWalkJoystickValue = 0.3f;
-        [Header("On Take Damage Settings")]
-        [SerializeField] private float damagedSpeedMultiplier = 1.5f;
-        [SerializeField] private float damagedTimeInSeconds = 2f;
+        [SerializeField] private float startWalkJoystickValue = 0.15f;
+        
+        [Header("Movement")]
+        [SerializeField] private float normalSpeed = 2f;
+        
+        [Header("OnDamaged")]
+        [SerializeField] private float onDamagedSpeed = 3f;
 
-        private IconController _iconController;
-        private float _sqrStartWalkValue;
-        private WalkState _walkState;
+        private Rigidbody2D _rb;
+        private Navigation _navigation;
         private Coroutine _onDamagedCoroutine;
-        private float _time;
+        private float _currentSpeed;
+        
+        public void OnBehaviourChange(Behaviour newBehaviour)
+        {
+            if (newBehaviour == Behaviour.Damaged) _currentSpeed = onDamagedSpeed;
+            else _currentSpeed = normalSpeed;
+        }
+        
         private void Awake()
         {
-            base.Awake();
-            _time = 0;
-            _walkState = WalkState.WalkDown;
-            _iconController = GetComponentInChildren<IconController>();
-            _sqrStartWalkValue = startWalkJoystickValue * startWalkJoystickValue;
-            GetComponent<PlayerHealth>().OnTakeDamage.AddListener(OnTakeDamage);
+            _rb = GetComponent<Rigidbody2D>();
+            _currentSpeed = normalSpeed;
+            _navigation = GetComponent<Navigation>();
         }
 
         private void Update()
         {
             MovementInput();
         }
-
-        private void OnTakeDamage(int health)
-        {
-            _time = damagedTimeInSeconds;
-            if (_onDamagedCoroutine == null)
-            {
-                StartCoroutine(MoveFasterCoroutine());
-            }
-        }
-        private IEnumerator MoveFasterCoroutine()
-        {
-            SetSpeedMultiplier(damagedSpeedMultiplier);
-            _iconController.SetIcon(Icons.Damaged);
-            while (_time > 0)
-            {
-                _time -= Time.deltaTime;
-                yield return null;
-            }
-            SetSpeedMultiplier(1);
-            _iconController.SetIcon(Icons.Normal);
-            _onDamagedCoroutine = null;
-        }
-        
         private void MovementInput()
         {
             var xAxis = joystick.Horizontal;
             var yAxis = joystick.Vertical;
+            
             if (Mathf.Abs(xAxis) < Mathf.Abs(yAxis)) xAxis = 0;
             else yAxis = 0;
+            
             var direction = new Vector2(xAxis, yAxis);
-            if (direction.sqrMagnitude < _sqrStartWalkValue)
+            if (direction.magnitude < startWalkJoystickValue)
             {
                 _rb.velocity = Vector2.zero;
                 return;
             }
-            SetCurrentDot(GetDots(direction));
-            Movement();
+            if (!_navigation.TryToMove(direction, _currentSpeed))
+            {
+                _rb.velocity = Vector2.zero;
+            }
         }
     }
 }

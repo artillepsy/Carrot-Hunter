@@ -1,122 +1,114 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Core;
+﻿using Core;
 using Player;
 using UnityEngine;
+using Behaviour = Core.Behaviour;
 
 namespace Enemy
 {
-    public class EnemyMovement : AbstractMovement, IOnStateChange
+    public class EnemyMovement : MonoBehaviour, IOnBehaviourChange
     {
-        
+        [Header("Movement")]
+        [SerializeField] private float normalSpeed = 1f;
+        [SerializeField] private float attackingSpeed = 1.3f;
+        [SerializeField] private float dirtySpeed = 0.4f;
+        [Header("Pathfinding")]
+        [SerializeField] private float nextTargetDistance = 0.1f;
         [SerializeField] private float checkPathRateInSeconds = 0.3f;
-        [Header("Speed settings")]
-        [SerializeField] private float attackingSpeedMultiplier = 1.3f;
-        [SerializeField] private float dirtySpeedMultiplier = 0.4f;
-        [SerializeField] private float nextCarrotDistance = 0.1f;
-
-        private float _sqrNextCarrotDistance;
+        
+        private float _timeSincePathUpdate = 0f;
+        private float _currentSpeed;
         private Transform _target;
         private Transform _player;
-        private Coroutine _updPathCoroutine;
-        private List<Vector2> cachedDots;
+        private Navigation _navigation;
+        private Vector2 _mainDirection, _secondDirection;
+        private Vector2 _nextDotPosition;
+        private Rigidbody2D _rb;
 
-        public void OnStateChange(State newState)
+        public void OnBehaviourChange(Behaviour newBehaviour)
         {
-            switch (newState)
+            switch (newBehaviour)
             {
-                case State.Normal:
-                    SetSpeedMultiplier(1);
-                    ChangeTargetToCarrot();
+                case Behaviour.Normal:
+                    _currentSpeed = normalSpeed;
+                    ChangeTarget();
                     break;
-                
-                case State.Attacking:
-                    SetSpeedMultiplier(attackingSpeedMultiplier);
+                case Behaviour.Attacking:
+                    _currentSpeed = attackingSpeed;
                     _target = _player;
                     break;
-                
-                case State.Dirty:
-                    SetSpeedMultiplier(dirtySpeedMultiplier);
-                    ChangeTargetToCarrot();
+                case Behaviour.Dirty:
+                    _currentSpeed = dirtySpeed;
+                    ChangeTarget();
                     break;
             }
         }
         
         private void Start()
         {
-            _sqrNextCarrotDistance = nextCarrotDistance * nextCarrotDistance;
+            _currentSpeed = normalSpeed;
+            _navigation = GetComponent<Navigation>();
+            _rb = GetComponent<Rigidbody2D>();
             _player = FindObjectOfType<PlayerMovement>().transform;
-            _player.GetComponent<CarrotPicker>().OnCarrotPickUp.AddListener(ChangeTargetToCarrot);
-            cachedDots = new List<Vector2>();
-            _target = _player;
-            StartCoroutine(UpdatePathCoroutine());
+            ChangeTarget();
+            _player.GetComponent<CarrotPicker>().OnCarrotPickUp.AddListener(ChangeTarget);
         }
-        
+
         private void Update()
         {
-            Movement();
+            if (IsTimeToUpdatePath()) UpdatePath();
+            if (_navigation.TryToMove(_mainDirection, _currentSpeed)) return;
+            if (_navigation.TryToMove(_secondDirection, _currentSpeed)) return;
+             _nextDotPosition = _navigation.GetNearestDot(_navigation.OverlapCircleRadius);
+            //_rb.velocity = Vector2.zero;
         }
-        
-        private void ChangeTargetToCarrot()
+
+        private bool IsTimeToUpdatePath()
         {
-            var carrots = GameObject.FindGameObjectsWithTag("Carrot").ToList();
-            if (carrots.Count == 0)
+            if (_timeSincePathUpdate >= checkPathRateInSeconds)
+            {
+                _timeSincePathUpdate = 0f;
+                return true;
+            }
+            _timeSincePathUpdate += Time.deltaTime;
+            return false;
+        }
+        private void UpdatePath()
+        {
+            if (_target == null) ChangeTarget();
+            else if (_target.CompareTag("Carrot"))
+            {
+                CheckDistanceToTarget();
+            }
+            if (_nextDotPosition == _navigation.NextDotPosition) return;
+            _nextDotPosition = _navigation.NextDotPosition;
+            
+            var direction = _target.position - transform.position;
+            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+            {
+                _mainDirection = new Vector2(direction.x, 0);
+                _secondDirection = new Vector2(0, direction.y);
+            }
+            else
+            {
+                _mainDirection = new Vector2(0, direction.y);
+                _secondDirection = new Vector2(direction.x, 0);
+            }
+        }
+        private void ChangeTarget()
+        {
+            var carrots = GameObject.FindGameObjectsWithTag("Carrot");
+            if (carrots.Length == 0)
             {
                 _target = _player;
                 return;
             }
-            _target = carrots[Random.Range(0, carrots.Count)].transform;
+            _target = carrots[Random.Range(0, carrots.Length)].transform;
         }
-
-        private void CheckDistanceToCarrot()
+        private void CheckDistanceToTarget()
         {
-            if (!_target.CompareTag("Carrot")) return;
-            var sqrDistance = (transform.position - _target.position).sqrMagnitude;
-            if (sqrDistance > _sqrNextCarrotDistance) return;
-            ChangeTargetToCarrot();
-        }
-        private IEnumerator UpdatePathCoroutine()
-        {
-            while (true)
-            {
-                if (!_reachedDot)
-                {
-                    yield return null;
-                    continue;
-                }
-
-                if (_target != null)
-                {
-                    CheckDistanceToCarrot();
-                }
-                else
-                {
-                    ChangeTargetToCarrot();
-                }
-                
-                var direction = _target.position - transform.position;
-                Vector2 mainVect, secondVect;
-                
-                if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-                {
-                    mainVect = new Vector2(direction.x, 0);
-                    secondVect = new Vector2(0, direction.y);
-                }
-                else
-                {
-                    mainVect = new Vector2(0, direction.y);
-                    secondVect = new Vector2(direction.x, 0);
-                }
-
-                cachedDots = GetDots(mainVect);
-                if (cachedDots.Count == 0)
-                {
-                    cachedDots = GetDots(secondVect);
-                }
-                SetCurrentDot(cachedDots);
-                yield return new WaitForSeconds(checkPathRateInSeconds);
-            }
+            var distance = (transform.position - _target.position).magnitude;
+            if (distance > nextTargetDistance) return;
+            ChangeTarget();
         }
     }
 }

@@ -1,50 +1,53 @@
-﻿using System.Collections;
-using Core;
+﻿using Core;
 using Player;
 using UnityEngine;
+using Behaviour = Core.Behaviour;
 
 namespace Enemy
 {
-    public class EnemyAttack : MonoBehaviour, IOnStateChange
+    public class EnemyAttack : MonoBehaviour, IOnBehaviourChange
     {
-        [SerializeField] private float attackRateInSeconds = 1.5f;
-        private PlayerHealth _playerHealth;
-        private bool _isAttacking = false;
-        private bool _playerIsNear = false;
-        
-        public void OnStateChange(State newState)
+        [SerializeField] private bool drawGizmos;
+        [SerializeField] private float kickReloadInSeconds = 1.5f;
+        [SerializeField] private float kickRadius;
+
+        private IAffectOnDamage _damageTarget;
+        private Transform _player;
+        private bool _attackMode = false;
+        private bool _reload = false;
+
+        public void OnBehaviourChange(Behaviour newBehaviour)
         {
-            _isAttacking = newState == State.Attacking;
+            _attackMode = newBehaviour == Behaviour.Attacking;
         }
 
         private void Start()
         {
-            _playerHealth = FindObjectOfType<PlayerHealth>();
-            StartCoroutine(AttackingCoroutine());
+            _player = GameObject.FindGameObjectWithTag("Player").transform;
+            _damageTarget = _player.GetComponent<IAffectOnDamage>();
         }
 
-        private IEnumerator AttackingCoroutine()
+        private void Update()
         {
-            while (true)
-            {
-                if (_playerIsNear && _isAttacking)
-                {
-                    _playerHealth.Damage();
-                    yield return new WaitForSeconds(attackRateInSeconds);
-                }
-                else yield return null;
-            }
+            if (_reload || !_attackMode) return;
+            if (!PlayerIsNear()) return;
+            _damageTarget.OnDamaged();
+            _reload = true;
+            Invoke(nameof(FinishReload), kickReloadInSeconds);
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private bool PlayerIsNear() => Vector2.Distance(_player.position, transform.position) < kickRadius;
+
+        private void FinishReload()
         {
-            if (!other.CompareTag("Player")) return;
-            _playerIsNear = true;
+            _reload = false;
         }
-        private void OnTriggerExit2D(Collider2D other)
+        
+        private void OnDrawGizmosSelected()
         {
-            if (!other.CompareTag("Player")) return;
-            _playerIsNear = false;
+            if (!drawGizmos) return;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, kickRadius);
         }
     }
 }

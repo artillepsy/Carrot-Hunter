@@ -1,65 +1,35 @@
-﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.Events;
+using Navigation = Core.Navigation;
 
 namespace Player
 {
     public class PlayerAttack : MonoBehaviour
     {
         [SerializeField] private bool drawGizmos = true;
-        [SerializeField] private Button bombBtn;
         [SerializeField] private Bomb bombPrefab;
         [Header("Attack settings")]
         [SerializeField] private float reloadTimeInSeconds = 3f;
-        [SerializeField] private float dirtyTimeInSeconds = 3f;
         [SerializeField] private float explosionRadius = 3f;
         [SerializeField] private float explosionDelayInSeconds = 3f;
         [Header("Placement settings")] 
         [SerializeField] private float overlapCircleRadius = 1.5f;
-
-        
+        public readonly UnityEvent<float> OnReload = new UnityEvent<float>();
         private bool _ready = true;
+        private Navigation _navigation;
+
+        private void Start()
+        {
+            _navigation = GetComponent<Navigation>();
+        }
 
         public void OnClickPlaceButton()
         {
            if (!_ready) return;
-           var spawnPos = GetBombSpawnPosition();
+           var spawnPos = _navigation.GetNearestDot(overlapCircleRadius);
            var bomb = Instantiate(bombPrefab, spawnPos, Quaternion.identity);
-           bomb.SetValues(explosionRadius, explosionDelayInSeconds, dirtyTimeInSeconds);
-           StartCoroutine(ReloadCoroutine());
-        }
-
-        private Vector2 GetBombSpawnPosition()
-        {
-            float minDistance = float.PositiveInfinity;
-            var spawnPosition = transform.position;
-            foreach (var coll in Physics2D.OverlapCircleAll(transform.position, overlapCircleRadius))
-            {
-                if(!coll.CompareTag("Dot")) continue;
-                var distance = (transform.position - coll.transform.position).sqrMagnitude;
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    spawnPosition = coll.transform.position;
-                }
-            }
-            return spawnPosition;
-        }
-        
-        private IEnumerator ReloadCoroutine()
-        {
-            _ready = false;
-            bombBtn.enabled = false;
-            float currentTime = 0;
-            while (currentTime < reloadTimeInSeconds)
-            {
-                currentTime += Time.deltaTime;
-                bombBtn.image.fillAmount = currentTime / reloadTimeInSeconds;
-                yield return null;
-            }
-
-            bombBtn.enabled = true;
-            _ready = true;
+           bomb.SetValues(explosionRadius, explosionDelayInSeconds);
+           OnReload?.Invoke(reloadTimeInSeconds);
         }
 
         private void OnDrawGizmosSelected()

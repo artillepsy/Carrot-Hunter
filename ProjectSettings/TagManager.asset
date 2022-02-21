@@ -48,21 +48,15 @@ TagManager:
   - name: Background
     uniqueID: 968513425
     locked: 0
-  - name: Stones
-    uniqueID: 4057343119
-    locked: 0
   - name: Carrots
     uniqueID: 1993637737
     locked: 0
-  - name: Bombs
+  - name: Objects
     uniqueID: 1416932073
     locked: 0
-  - name: Characters
-    uniqueID: 92581203
-    locked: 0
   - name: Effects
-    uniqueID: 2976582139
+    uniqueID: 1712163839
     locked: 0
   - name: Icons
-    uniqueID: 3247057767
+    uniqueID: 3166047903
     locked: 0

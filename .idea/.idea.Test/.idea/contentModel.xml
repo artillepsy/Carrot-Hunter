@@ -27,24 +27,30 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="Carrots" t="Include">
+            <e p="Carrot.cs" t="Include" />
+          </e>
           <e p="Core" t="Include">
-            <e p="AbstractMovement.cs" t="Include" />
             <e p="AnimationController.cs" t="Include" />
+            <e p="BaseBehaviourController.cs" t="Include" />
+            <e p="Behaviour.cs" t="Include" />
+            <e p="IAffectOnDamage.cs" t="Include" />
             <e p="IconController.cs" t="Include" />
+            <e p="IOnBehaviourChange.cs" t="Include" />
+            <e p="Navigation.cs" t="Include" />
             <e p="SpriteAnimation.cs" t="Include" />
-            <e p="State.cs" t="Include" />
-            <e p="WalkState.cs" t="Include" />
+            <e p="WalkDirection.cs" t="Include" />
           </e>
           <e p="Enemy" t="Include">
             <e p="EnemyAttack.cs" t="Include" />
+            <e p="EnemyBehaviourController.cs" t="Include" />
             <e p="EnemyMovement.cs" t="Include" />
-            <e p="EnemyStateController.cs" t="Include" />
-            <e p="IOnStateChange.cs" t="Include" />
           </e>
           <e p="Player" t="Include">
             <e p="Bomb.cs" t="Include" />
             <e p="CarrotPicker.cs" t="Include" />
             <e p="PlayerAttack.cs" t="Include" />
+            <e p="PlayerBehaviourCOntroller.cs" t="Include" />
             <e p="PlayerHealth.cs" t="Include" />
             <e p="PlayerMovement.cs" t="Include" />
           </e>
@@ -52,6 +58,9 @@
             <e p="CanvasManager.cs" t="Include" />
             <e p="ObjectPlacer.cs" t="Include" />
             <e p="StatsManager.cs" t="Include" />
+          </e>
+          <e p="UI" t="Include">
+            <e p="ReloadButton.cs" t="Include" />
           </e>
         </e>
         <e p="TextMesh Pro" t="Include">

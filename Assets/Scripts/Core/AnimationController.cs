@@ -1,65 +1,54 @@
-﻿using Enemy;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Core
 {
-    public class AnimationController : MonoBehaviour, IOnStateChange
+    public class AnimationController : MonoBehaviour, IOnBehaviourChange
     {
         [SerializeField] private float minVelocityToChange = 0.1f;
-        [SerializeField] private float minAngleToChange = 10f;
+        [SerializeField] private Animator animator;
         
-        private float _sqrMinVelocityToChange;
-        private Animator _animator;
-        private WalkState _walkState;
+        private WalkDirection walkDirection;
         private Rigidbody2D _rb;
-        private Vector2 _prevDirection;
-        private State _currentState;
+        private static readonly int _walkDirectionId = Animator.StringToHash("WalkDirection");
+        private static readonly int _behaviourId = Animator.StringToHash("Behaviour");
+
+        public void OnBehaviourChange(Behaviour newBehaviour)
+        {
+            animator.SetInteger(_behaviourId,  (int) newBehaviour);
+        }
         
         private void Awake()
         {
-            _prevDirection = Vector2.up;
             _rb = GetComponentInParent<Rigidbody2D>();
-            _animator = GetComponent<Animator>();
-            _sqrMinVelocityToChange = minVelocityToChange * minVelocityToChange;
-            _currentState = State.Normal;
-            _walkState = WalkState.WalkDown;
+            animator.SetInteger(_behaviourId,  (int) Behaviour.Normal);
+            animator.SetInteger(_walkDirectionId,  (int) WalkDirection.Down);
         }
         
         private void Update()
         {
-            if (_rb.velocity.sqrMagnitude < _sqrMinVelocityToChange) return;
-            ChangeWalkState(_rb.velocity);
+            UpdateDirection();
         }
         
-        private void ChangeWalkState(Vector2 direction)
+        private void UpdateDirection()
         {
-            var prevAngle = Vector2.Angle(_prevDirection, direction);
-            if (prevAngle < minAngleToChange) return;
-            
-            var angle = Vector2.Angle(Vector2.up, direction);
-
-            if (angle < 45)
+            if (_rb.velocity.magnitude < minVelocityToChange) return;
+            var currentDirection = WalkDirection.Down;
+            Vector2 direction;
+            if (Mathf.Abs(_rb.velocity.x) > Mathf.Abs(_rb.velocity.y))
             {
-                _walkState = WalkState.WalkUp;
-            }
-            else if (angle < 135)
-            {
-                _walkState = direction.x > 0 ? WalkState.WalkRight : WalkState.WalkLeft;
+                direction = new Vector2(_rb.velocity.x, 0).normalized;
             }
             else
             {
-                _walkState = WalkState.WalkDown;
+                direction = new Vector2(0, _rb.velocity.y).normalized;
             }
 
-            _prevDirection = direction;
-            _animator.SetInteger("State", (int) _walkState + (int) _currentState);
+            if (direction == Vector2.up) currentDirection = WalkDirection.Up;
+            else if (direction == Vector2.down) currentDirection = WalkDirection.Down;
+            else if (direction == Vector2.left) currentDirection = WalkDirection.Left;
+            else if (direction == Vector2.right) currentDirection = WalkDirection.Right;
             
-        }
-
-        public void OnStateChange(State newState)
-        {
-            _currentState = newState;
-            _animator.SetInteger("State", (int) _walkState + (int) _currentState);
+            animator.SetInteger(_walkDirectionId,  (int) currentDirection);
         }
     }
 }

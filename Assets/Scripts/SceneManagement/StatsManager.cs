@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Carrots;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -26,10 +27,7 @@ namespace SceneManagement
         public int CalculateScore(int maxValue)
         {
             var score = (float)_endCarrotCount / _startCarrotCount;
-            Debug.Log(score);
             var segment = 1f / maxValue;
-            Debug.Log(segment);
-            Debug.Log(Mathf.RoundToInt(score / segment));
             return Mathf.RoundToInt(score / segment);
         }
 
@@ -47,7 +45,7 @@ namespace SceneManagement
             _playerHealth = FindObjectOfType<PlayerHealth>();
             _playerHealth.OnTakeDamage.AddListener(ChangeHeartsCount);
 
-            Bomb.OnCarrotExplose.AddListener(DecrementCarrotCount);
+            Carrot.OnCarrotExplose.AddListener(DecrementCarrotCount);
             FindObjectOfType<CarrotPicker>().OnCarrotPickUp.AddListener(IncreaseScore);
             DisplayHearts();
         }
@@ -80,9 +78,9 @@ namespace SceneManagement
                 _hearts.Add(Instantiate(heartPrefab, heartsParent));
             }
         }
-        private void ChangeHeartsCount(int health)
+        private void ChangeHeartsCount()
         {
-            if (health == 0)
+            if (_playerHealth.Health == 0)
             {
                 OnGameOver?.Invoke();
                 _endGame = true;

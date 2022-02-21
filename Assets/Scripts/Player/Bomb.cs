@@ -1,67 +1,71 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Enemy;
+﻿using System.Collections.Generic;
+using Core;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Player
 {
     public class Bomb : MonoBehaviour
     {
-        public static readonly UnityEvent OnCarrotExplose = new UnityEvent();
         [SerializeField] private Transform wick;
         [SerializeField] private ParticleSystem wickSparksParticleSystem;
         [SerializeField] private ParticleSystem explosionPartileSystem;
-        [SerializeField] private float rotationMaxAngle = 3f;
+        [SerializeField] private float rotationMaxAngle = 1f;
         [SerializeField] private float rotationSpeed = 5f;
 
         [Header("Overlap Settings")]
         [Range(0, 45)]
-        [SerializeField] private float maxDeviationAngle = 10f;
-
+        [SerializeField] private float maxDeviationAngle = 15f;
         
         private float _rotationTime = 0;
+        private float _timeSinceSpawned = 0f;
         
-        public void SetValues(float explosionRadius, float explosionDelay, float dirtyTime)
+        private bool _canExplode = false;
+        private float _explosionDelay;
+        private float _explosionRadius;
+       
+        public void SetValues(float explosionRadius, float explosionDelay)
         {
-            StartCoroutine(ExploseCoroutine(explosionRadius, explosionDelay, dirtyTime));
+            _explosionDelay = explosionDelay;
+            _explosionRadius = explosionRadius;
+            _canExplode = true;
+            Instantiate(wickSparksParticleSystem, wick.position, Quaternion.identity, wick);
         }
 
         private void Update()
         {
-            _rotationTime += Time.deltaTime;
-            transform.rotation = quaternion.Euler(0,0, Mathf.Sin(_rotationTime * rotationSpeed) * rotationMaxAngle); 
+            if(IsTimeToExplode()) Explode();
+            RotateBomb();
         }
-
-        private IEnumerator ExploseCoroutine(float explosionRadius, float explosionDelay, float dirtyTime)
+        
+        private bool IsTimeToExplode()
         {
-            Instantiate(wickSparksParticleSystem, wick.position, Quaternion.identity, wick);
-            yield return new WaitForSeconds(explosionDelay);
-           
-            var colliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+            if (!_canExplode) return false;
+            if (_timeSinceSpawned >= _explosionDelay)
+            {
+                _timeSinceSpawned = 0f;
+                return true;
+            }
+            _timeSinceSpawned+=Time.deltaTime;
+            return false;
+        }
+        
+        private void RotateBomb()
+        {
+            _rotationTime += Time.deltaTime;
+            transform.rotation = quaternion.Euler(0,0, Mathf.Sin(
+                _rotationTime * rotationSpeed) * rotationMaxAngle);
+        }
+        
+        private void Explode()
+        {
             var dots = new List<Vector2>();
+            var colliders = Physics2D.OverlapCircleAll(transform.position, _explosionRadius);
             foreach (var coll in colliders)
             {
-                if(IsOverlapping(coll.transform.position)) continue;
-                if (!coll.isTrigger && coll.CompareTag("Enemy"))
-                {
-                    coll.GetComponent<EnemyStateController>().MakeDirty(dirtyTime);
-                    continue;
-                }
-                if (coll.CompareTag("Player"))
-                {
-                    coll.GetComponent<PlayerHealth>().Damage();
-                    continue;
-                }
-                if (coll.CompareTag("Carrot"))
-                {
-                    Destroy(coll.gameObject);
-                    OnCarrotExplose?.Invoke();
-                    continue;
-                }
-                if (!coll.CompareTag("Dot")) continue;
-                dots.Add(coll.transform.position);
+                if(IsObstacleBetweenPoints(coll.transform.position)) continue;
+                if(coll.CompareTag("Dot")) dots.Add(coll.transform.position);
+                else coll.GetComponent<IAffectOnDamage>()?.OnDamaged();
             }
             SpawnParticles(dots);
             Destroy(gameObject);
@@ -75,7 +79,7 @@ namespace Player
             }
         }
 
-        private bool IsOverlapping(Vector2 position)
+        private bool IsObstacleBetweenPoints(Vector2 position)
         {
             var currentVector = position - (Vector2) transform.position;
             var deviationAngle = Vector2.Angle(Vector2.up, currentVector);
@@ -84,12 +88,10 @@ namespace Player
             {
                 return true;
             }
-
             foreach (var hit in Physics2D.LinecastAll(position, transform.position))
             {
                 if (hit.collider.CompareTag("Obstacle")) return true;
             }
-            
             return false;
         }
     }
